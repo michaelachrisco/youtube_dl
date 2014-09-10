@@ -29,7 +29,7 @@ module YoutubeDl
     end
 
     def get_url
-      %x[youtube_dl_binary, '-g', @uri.to_s]
+      system(youtube_dl_binary, '-g', @uri.to_s)
     end
 
     def extended_info
