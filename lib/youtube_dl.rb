@@ -13,6 +13,7 @@ module YoutubeDl
       @uri = URI.parse page_uri
       @location = options[:location] || "tmp/downloads" # default path
       @format = options[:format] || 18                  # default format
+      @no_ssl = options[:no_ssl]                        # default ssl
       @youtube_dl_binary = options[:youtube_dl_binary] || YOUTUBE_DL
     end
 
@@ -29,7 +30,7 @@ module YoutubeDl
     end
 
     def get_url
-      `#{youtube_dl_binary} -g #{@uri.to_s} -f #{@format}`.strip
+      `#{youtube_dl_binary} -g #{@uri.to_s} -f #{@format} #{@no_ssl ? '--prefer-insecure' : ''}`.strip
     end
 
     def extended_info
