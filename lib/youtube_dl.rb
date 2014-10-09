@@ -33,6 +33,10 @@ module YoutubeDl
       `#{youtube_dl_binary} -g #{@uri.to_s} -f #{@format} #{@no_ssl ? '--prefer-insecure' : ''}`.strip
     end
 
+    def get_json
+      `#{youtube_dl_binary} -j #{@uri.to_s} #{@no_ssl ? '--prefer-insecure' : ''}`.strip
+    end
+
     def extended_info
       @video_info ||= HTTParty.get("http://www.youtube.com/get_video_info?video_id=#{video_id}&el=detailpage")
     end
