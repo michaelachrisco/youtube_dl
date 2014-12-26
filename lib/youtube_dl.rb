@@ -46,6 +46,11 @@ module YoutubeDl
       video_filename if File.exist?(video_filename)
     end
 
+    def download_audio(options = {})
+      system(youtube_dl_binary, '--extract-audio', '--no-mtime', '-q', '--no-progress', '-o', video_filename, '-f', (options[:format] || @format).to_s, @uri.to_s)
+      video_filename if File.exist?(video_filename)
+    end
+
     def download_preview(options = {})
       link = if !extended_info_body["iurlsd"].blank?
         extended_info_body["iurlsd"].first
