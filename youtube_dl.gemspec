@@ -17,4 +17,7 @@ Gem::Specification.new do |gem|
   gem.version       = YoutubeDl::VERSION
 
   gem.add_dependency 'httparty'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'vcr'
+  gem.add_development_dependency 'webmock'
 end
