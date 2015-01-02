@@ -53,7 +53,7 @@ module YoutubeDl
       video_filename if File.exist?(video_filename)
     end
 
-    def download_preview(options = {})
+    def download_preview(_options = {})
       link = if !extended_info_body['iurlsd'].blank?
                extended_info_body['iurlsd'].first
              else
@@ -74,7 +74,7 @@ module YoutubeDl
     def extended_info_body
       params(extended_info.body)
     end
-    
+
     def use_batch_file(batch_file)
       system(youtube_dl_binary, '-a', batch_file)
     end
