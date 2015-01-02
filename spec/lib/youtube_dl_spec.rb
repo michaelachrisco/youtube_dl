@@ -18,7 +18,7 @@ RSpec.describe YoutubeDl::YoutubeVideo do
 
       subject(:video) {
         YoutubeDl::YoutubeVideo.new('http://www.youtube.com/watch?v=zzG4K2m_j5U',
-                                    youtube_dl_binary: exe_path)
+                                    :youtube_dl_binary => exe_path)
       }
 
       it { is_expected.to be_truthy }
@@ -81,6 +81,11 @@ RSpec.describe YoutubeDl::YoutubeVideo do
           expect(video.video_filename)
           .to eq('tmp/downloads/zzG4K2m_j5U.mp4')
         }
+      end
+      describe '.use_batch_file' do
+        it 'file to exist' do
+          expect(File.exist?('spec/batch.txt')).to be_truthy
+        end
       end
     end
   end
