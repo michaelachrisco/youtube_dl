@@ -5,21 +5,19 @@ require 'cgi'
 
 module YoutubeDl
   class YoutubeVideo
-    YOUTUBE_DL = File.join(File.expand_path(File.dirname(__FILE__)), "../bin/youtube-dl")
+    YOUTUBE_DL = File.join(File.expand_path(File.dirname(__FILE__)), '../bin/youtube-dl')
 
-    FORMATS = {18 => {ext: "mp4"}}
+    FORMATS = { 18 => { ext: 'mp4' } }
 
     def initialize(page_uri, options = {})
       @uri = URI.parse page_uri
-      @location = options[:location] || "tmp/downloads" # default path
+      @location = options[:location] || 'tmp/downloads' # default path
       @format = options[:format] || 18                  # default format
       @no_ssl = options[:no_ssl]                        # default ssl
       @youtube_dl_binary = options[:youtube_dl_binary] || YOUTUBE_DL
     end
 
-    def youtube_dl_binary
-      @youtube_dl_binary
-    end
+    attr_reader :youtube_dl_binary
 
     def video_id
       params(@uri.query)['v'].first
@@ -42,20 +40,24 @@ module YoutubeDl
     end
 
     def download_video(options = {})
-      system(youtube_dl_binary, '-q', '--no-progress', '-o', video_filename, '-f', (options[:format] || @format).to_s, @uri.to_s)
+      system(youtube_dl_binary, '-q', '--no-progress', '-o',
+             video_filename, '-f',
+             (options[:format] || @format).to_s, @uri.to_s)
       video_filename if File.exist?(video_filename)
     end
 
     def download_audio(options = {})
-      system(youtube_dl_binary, '--extract-audio', '--no-mtime', '-q', '--no-progress', '-o', video_filename, '-f', (options[:format] || @format).to_s, @uri.to_s)
+      system(youtube_dl_binary, '--extract-audio', '--no-mtime', '-q',
+             '--no-progress', '-o', video_filename, '-f',
+             (options[:format] || @format).to_s, @uri.to_s)
       video_filename if File.exist?(video_filename)
     end
 
-    def download_preview(options = {})
-      link = if !extended_info_body["iurlsd"].blank?
-        extended_info_body["iurlsd"].first
-      else
-        extended_info_body["thumbnail_url"].first
+    def download_preview(_options = {})
+      link = if !extended_info_body['iurlsd'].blank?
+               extended_info_body['iurlsd'].first
+             else
+               extended_info_body['thumbnail_url'].first
       end
       system('wget', '-O', preview_filename, link)
       preview_filename if File.exist?(preview_filename)
@@ -71,6 +73,10 @@ module YoutubeDl
 
     def extended_info_body
       params(extended_info.body)
+    end
+
+    def use_batch_file(batch_file)
+      system(youtube_dl_binary, '-a', batch_file)
     end
 
     private
